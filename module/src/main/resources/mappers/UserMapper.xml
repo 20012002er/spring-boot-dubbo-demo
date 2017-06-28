@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jia16.uc.mapper.UserMapper">
+
+    <sql id="userColumns">
+        U.ID AS U_ID,
+        U.NAME AS U_NAME,
+        U.TYPE AS U_TYPE,
+        U.CREATED_AT AS U_CREATED_AT,
+        U.USER_ID AS U_USER_ID,
+        U.LAST_LOGIN_AT AS U_LAST_LOGIN_AT
+    </sql>
+
+    <sql id="regularColumns">
+        RU.PHONE AS U_PHONE,
+        RU.PWD AS U_PWD,
+        RU.OPENID AS U_OPENID,
+        RU.CERTIFICATE_NAME AS U_CERTIFICATE_NAME,
+        RU.CERTIFIATE_IDENTITY AS U_CERTIFICATE_IDENTITY,
+        RU.TRANSACTION_PASSWORD AS U_TRANSACTION_PASSWORD,
+        RU.NOTIFY_DEPOSIT_AGREEMENT AS U_NOTIFY_DEPOSIT_AGREEMENT,
+        RU.ZALL_USER_ID AS U_ZALL_USER_ID,
+        RU.MODIFY_USER_NAME_COUNT AS U_MODIFY_USER_NAME_COUNT
+    </sql>
+
+    <resultMap id="user" type="com.jia16.uc.domain.User">
+        <id column="U_ID" property="id"/>
+        <result column="U_NAME" property="username"/>
+        <result column="U_CREATED_AT" property="createdAt"/>
+        <result column="U_USER_ID" property="userId"/>
+        <result column="U_LAST_LOGIN_AT" property="lastLoginAt"/>
+        <result column="U_PHONE" property="phone"/>
+        <result column="U_PWD" property="password"/>
+        <result column="U_OPENID" property="openid"/>
+        <result column="U_TRANSACTION_PASSWORD" property="dealPassword"/>
+        <result column="U_NOTIFY_DEPOSIT_AGREEMENT" property="notifyDepositAgreement"/>
+        <result column="U_MODIFY_USER_NAME_COUNT" property="modifyUserNameCount"/>
+        <result column="U_ZALL_USER_ID" property="zallUserId"/>
+        <association property="certificate" javaType="com.jia16.uc.domain.Certificate">
+            <result column="U_CERTIFICATE_NAME" property="certificateName"/>
+            <result column="U_CERTIFICATE_IDENTITY" property="certificateIdentity"/>
+        </association>
+    </resultMap>
+
+    <select id="findUserByPhone" resultMap="user">
+        SELECT
+        <include refid="userColumns"/>,
+        <include refid="regularColumns"/>
+        FROM UMS_USERS U
+        LEFT JOIN UMS_REGULAR_USERS RU ON U.ID = RU.USER_ID
+        WHERE RU.PHONE = #{phone};
+    </select>
+</mapper>

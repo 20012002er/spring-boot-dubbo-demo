@@ -1,0 +1,101 @@
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven { url "http://repo.spring.io/snapshot" }
+        maven { url "http://repo.spring.io/milestone" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE")
+    }
+}
+
+plugins {
+    id "org.flywaydb.flyway" version "4.0.3"
+}
+apply from: "${projectDir}/flyway.gradle"
+
+apply plugin: 'java'
+apply plugin: 'spring-boot'
+apply plugin: 'maven'
+
+group 'com.jia16.uc'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    jcenter()
+    mavenCentral()
+    maven { url "http://repo.spring.io/snapshot" }
+    maven { url "http://repo.spring.io/milestone" }
+}
+
+ext {
+    mybatisVersion = "3.4.1"
+    mysqlCommectorVersion = "5.1.39"
+    mybatisSpringBootStarterVersion = "1.1.1"
+    springBootStarterVersion = "1.4.0.RELEASE"
+    freemarkerVersion = "2.3.25-incubating"
+    commonsIoVersion = "2.5"
+    jodaTimeVersion = "2.9.4"
+    jodaMoneyVersion = '0.10.0'
+    jacksonVersion = "2.8.1"
+    onsClientVersion = "1.2.4"
+    commonsCollections = "3.2.1"
+    commonsLang = "2.6"
+    commonsHttpclient = "3.1"
+    springVersion = "4.0.6.RELEASE"
+    druidVersion = "1.1.0"
+    dubboVersion = "2.5.3"
+    zkclientVersion = "0.3"
+    zookeeperVersion = "3.4.8"
+}
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter-web:$springBootStarterVersion"
+    compile "org.springframework.boot:spring-boot-starter-freemarker:$springBootStarterVersion"
+    compile "org.mybatis.spring.boot:mybatis-spring-boot-starter:$mybatisSpringBootStarterVersion"
+    compile "org.springframework.boot:spring-boot-starter-redis:$springBootStarterVersion"
+    compile "com.alibaba:druid-spring-boot-starter:$druidVersion"
+
+    compile "org.mybatis:mybatis:$mybatisVersion"
+    compile "mysql:mysql-connector-java:$mysqlCommectorVersion"
+
+    compile "commons-collections:commons-collections:$commonsCollections"
+    compile "commons-lang:commons-lang:$commonsLang"
+    compile "commons-io:commons-io:$commonsIoVersion"
+    compile "joda-time:joda-time:$jodaTimeVersion"
+    compile "org.joda:joda-money:$jodaMoneyVersion"
+    compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+    compile 'com.jayway.jsonpath:json-path-assert:2.2.0'
+    compile "com.aliyun.openservices:ons-client:$onsClientVersion"
+    compile "commons-httpclient:commons-httpclient:$commonsHttpclient"
+    compile "commons-codec:commons-codec:1.9"
+
+    compile ("com.alibaba:dubbo:$dubboVersion") {
+        exclude(module: "spring")
+    }
+    compile ("org.apache.zookeeper:zookeeper:$zookeeperVersion") {
+        exclude(module: "log4j")
+    }
+    compile ("com.101tec:zkclient:$zkclientVersion") {
+        exclude(module: "log4j")
+    }
+
+    compile "org.springframework:spring-context-support:$springVersion"
+    compile "org.springframework:spring-tx:$springVersion"
+
+    compile "com.google.code.gson:gson"
+
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+}
+
+configurations.all {
+    exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+}
+
+bootRepackage {
+    mainClass = 'com.jia16.uc.Application'
+}
