@@ -51,6 +51,7 @@ ext {
     dubboVersion = "2.5.3"
     zkclientVersion = "0.3"
     zookeeperVersion = "3.4.8"
+    jbcryptVersion = "0.4"
 }
 
 dependencies {
@@ -88,6 +89,7 @@ dependencies {
     compile "org.springframework:spring-tx:$springVersion"
 
     compile "com.google.code.gson:gson"
+    compile "org.mindrot:jbcrypt:$jbcryptVersion"
 
     testCompile "org.springframework.boot:spring-boot-starter-test"
 }
